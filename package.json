@@ -1,6 +1,6 @@
 {
   "name": "interview-preparation-app",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "AI-powered mock technical interview desktop application",
   "main": "src/main.js",
   "scripts": {
