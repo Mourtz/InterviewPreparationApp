@@ -57,6 +57,12 @@ header p {
 .btn-linux:hover { background: #065f46; }
 .btn-web { background: #f59e42; color: #222; }
 .btn-web:hover { background: #d97706; color: #fff; }
+.download-note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 12px;
+    font-style: italic;
+}
 footer {
     text-align: center;
     color: #888;

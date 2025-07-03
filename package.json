@@ -13,7 +13,7 @@
     "build:all": "electron-builder --win --mac --linux",
     "build:local:win": "electron-builder --win --publish never",
     "build:local:mac": "electron-builder --mac --publish never",
-    "build:local:linux": "electron-builder --linux --publish never",
+    "build:local:linux": "electron-builder --linux --publish never --config.linux.target=tar.xz",
     "build:linux:safe": "electron-builder --linux --publish never --config.linux.target=tar.xz",
     "build:linux:appimage": "electron-builder --linux --publish never --config.linux.target=AppImage",
     "build:dir": "electron-builder --dir",
@@ -107,10 +107,6 @@
       "target": [
         {
           "target": "tar.xz",
-          "arch": ["x64"]
-        },
-        {
-          "target": "snap",
           "arch": ["x64"]
         }
       ],
