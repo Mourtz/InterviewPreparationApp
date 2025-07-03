@@ -502,6 +502,31 @@ function enableCopyProtection() {
         return false;
     }, true);
     
+    // Allow paste operations in input fields
+    document.addEventListener('paste', (e) => {
+        const activeElement = e.target;
+        const isInputField = activeElement && (
+            activeElement.tagName === 'INPUT' || 
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.id === 'api-key' ||
+            activeElement.classList.contains('paste-allowed') ||
+            activeElement.classList.contains('CodeMirror-code') ||
+            activeElement.closest('.CodeMirror')
+        );
+        
+        if (isInputField) {
+            console.log('✅ Paste operation allowed in input field:', activeElement.tagName, activeElement.id);
+            return true; // Allow the paste operation
+        } else {
+            console.log('🚫 Paste operation blocked in protected area');
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            showCopyProtectionMessage();
+            return false;
+        }
+    }, true);
+    
     document.addEventListener('selectstart', (e) => {
         // Allow selection in answer fields but block in question areas
         if (e.target.closest('#question-content') || e.target.classList.contains('copy-protected')) {
@@ -702,7 +727,7 @@ function enableCopyProtection() {
         return false;
     });
     
-    // Monitor and block clipboard operations
+    // Monitor and block clipboard operations - EXCEPT for input fields
     if (navigator.clipboard) {
         const originalWriteText = navigator.clipboard.writeText;
         const originalRead = navigator.clipboard.read;
@@ -720,6 +745,20 @@ function enableCopyProtection() {
         };
         
         navigator.clipboard.readText = () => {
+            // Allow clipboard reading in specific contexts (for paste operations in input fields)
+            const activeElement = document.activeElement;
+            if (activeElement && (
+                activeElement.tagName === 'INPUT' || 
+                activeElement.tagName === 'TEXTAREA' ||
+                activeElement.id === 'api-key' ||
+                activeElement.classList.contains('CodeMirror-code') ||
+                activeElement.classList.contains('paste-allowed') ||
+                activeElement.closest('.CodeMirror')
+            )) {
+                console.log('✅ Clipboard read allowed for input field:', activeElement.tagName, activeElement.id, activeElement.className);
+                return originalReadText.call(navigator.clipboard);
+            }
+            
             console.log('🚫 Clipboard read text blocked');
             return Promise.reject(new Error('Clipboard access disabled during interview'));
         };
@@ -748,6 +787,24 @@ function enableCopyProtection() {
     
     // Block common developer shortcuts globally
     document.addEventListener('keydown', (e) => {
+        // Allow paste operations in input fields
+        const activeElement = document.activeElement;
+        const isInputField = activeElement && (
+            activeElement.tagName === 'INPUT' || 
+            activeElement.tagName === 'TEXTAREA' ||
+            activeElement.id === 'api-key' ||
+            activeElement.classList.contains('CodeMirror-code') ||
+            activeElement.classList.contains('paste-allowed') ||
+            activeElement.closest('.CodeMirror')
+        );
+        
+        // Allow Ctrl+V (paste) in input fields
+        if (isInputField && ((e.ctrlKey && e.key === 'v') || (e.ctrlKey && e.key === 'V') || 
+                             (e.metaKey && e.key === 'v') || (e.metaKey && e.key === 'V'))) {
+            console.log('✅ Paste operation allowed in input field:', activeElement.tagName, activeElement.id);
+            return true; // Allow the paste operation
+        }
+        
         // Additional shortcuts to block
         const blockedCombos = [
             // Developer tools

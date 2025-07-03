@@ -512,7 +512,22 @@ class InterviewApp {
         const refreshModels = document.getElementById('refresh-models');
         
         if (aiProvider) aiProvider.addEventListener('change', this.handleProviderChange.bind(this));
-        if (apiKey) apiKey.addEventListener('input', this.handleApiKeyChange.bind(this));
+        if (apiKey) {
+            apiKey.addEventListener('input', this.handleApiKeyChange.bind(this));
+            // Add explicit paste support for API key field
+            apiKey.addEventListener('paste', (e) => {
+                console.log('🔑 API key paste event triggered (web)');
+                setTimeout(() => {
+                    console.log('🔑 API key value after paste (web):', apiKey.value.length > 0 ? '[REDACTED]' : 'empty');
+                    this.handleApiKeyChange({ target: apiKey });
+                }, 10);
+            });
+            // Ensure the input allows paste operations
+            apiKey.classList.add('paste-allowed');
+            apiKey.style.webkitUserSelect = 'text';
+            apiKey.style.mozUserSelect = 'text';
+            apiKey.style.userSelect = 'text';
+        }
         if (aiModel) aiModel.addEventListener('change', this.handleModelChange.bind(this));
         if (testProvider) testProvider.addEventListener('click', this.testProviderConnection.bind(this));
         if (refreshModels) refreshModels.addEventListener('click', this.refreshModels.bind(this));

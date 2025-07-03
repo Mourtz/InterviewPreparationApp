@@ -939,6 +939,11 @@ header p {
     font-family: inherit;
     background: #fff;
     transition: border-color 0.2s ease;
+    /* Ensure text input and selection works */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .provider-config input[type="password"]:focus {

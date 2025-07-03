@@ -65,6 +65,39 @@ function setupEventListeners() {
     // AI Provider handlers
     document.getElementById('ai-provider').addEventListener('change', onProviderChange);
     
+    // API key input - ensure paste functionality works
+    const apiKeyInput = document.getElementById('api-key');
+    if (apiKeyInput) {
+        // Ensure paste events work properly
+        apiKeyInput.addEventListener('paste', (e) => {
+            console.log('🔑 API key paste event triggered');
+            // Allow default paste behavior
+            setTimeout(() => {
+                console.log('🔑 API key value after paste:', apiKeyInput.value.length > 0 ? '[REDACTED]' : 'empty');
+                validateForm();
+            }, 10);
+        });
+        
+        // Also handle input events
+        apiKeyInput.addEventListener('input', (e) => {
+            console.log('🔑 API key input changed');
+            validateForm();
+        });
+        
+        // Ensure the input is not disabled or readonly
+        apiKeyInput.removeAttribute('disabled');
+        apiKeyInput.removeAttribute('readonly');
+        
+        // Add specific attributes to ensure paste works
+        apiKeyInput.setAttribute('contenteditable', 'false'); // Reset any conflicting attributes
+        apiKeyInput.style.webkitUserSelect = 'text';
+        apiKeyInput.style.mozUserSelect = 'text';
+        apiKeyInput.style.userSelect = 'text';
+        
+        // Add a class to identify this as a paste-allowed input
+        apiKeyInput.classList.add('paste-allowed');
+    }
+    
     // Form validation
     document.getElementById('programming-language').addEventListener('change', validateForm);
     document.getElementById('ai-model').addEventListener('change', onModelChange);
