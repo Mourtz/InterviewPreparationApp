@@ -1,0 +1,166 @@
+{
+  "name": "interview-preparation-app",
+  "version": "1.0.0",
+  "description": "AI-powered mock technical interview desktop application",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --win --mac --linux",
+    "build:dir": "electron-builder --dir",
+    "build:portable": "electron-builder --win portable",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "pack": "electron-builder --dir",
+    "dist": "npm run build",
+    "web:install": "cd web && npm install",
+    "web:start": "cd web && npm start",
+    "web:dev": "cd web && npm run dev",
+    "web:build": "cd web && npm run build",
+    "web:build-static": "cd web && npm run build-static",
+    "web:clean": "cd web && rimraf dist",
+    "build-web": "npm run web:build-static",
+    "clean-web": "npm run web:clean",
+    "setup:web": "npm run web:install && echo 'Web version ready! Run: npm run web:start'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.interviewprep.app",
+    "productName": "Interview Preparation App",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "src/**/*",
+      "renderer/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "!node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!node_modules/*.d.ts",
+      "!node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "extraFiles": [
+      {
+        "from": "AI_PROVIDERS_SETUP.md",
+        "to": "resources/AI_PROVIDERS_SETUP.md"
+      },
+      {
+        "from": "README.md",
+        "to": "resources/README.md"
+      },
+      {
+        "from": "TROUBLESHOOTING.md",
+        "to": "resources/TROUBLESHOOTING.md"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        },
+        {
+          "target": "rpm",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Interview Preparation App"
+    },
+    "dmg": {
+      "title": "Interview Preparation App",
+      "backgroundColor": "#667eea",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 140,
+          "y": 150,
+          "type": "file"
+        },
+        {
+          "x": 400,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
+  "keywords": [
+    "electron",
+    "interview",
+    "ai",
+    "mock-interview",
+    "technical-interview"
+  ],
+  "author": "Interview Preparation App",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.1.0",
+    "electron-builder": "^26.0.12",
+    "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "codemirror": "^5.65.19",
+    "multer": "^2.0.1",
+    "pdf-parse": "^1.1.1"
+  }
+}

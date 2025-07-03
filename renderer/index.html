@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Preparation App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/theme/material-darker.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Mock Technical Interview Preparation</h1>
+            <p>Prepare for your technical interviews with AI-powered mock sessions</p>
+        </header>
+
+        <main class="setup-form">
+            <div class="form-section">
+                <h2>📄 Upload Documents</h2>
+                <div class="upload-area">
+                    <div class="upload-item">
+                        <label for="cv-upload">CV/Resume (Optional - PDF or Text)</label>
+                        <button id="cv-upload" class="upload-btn">
+                            <span class="upload-icon">📎</span>
+                            Choose CV File (Optional)
+                        </button>
+                        <span id="cv-filename" class="filename"></span>
+                        <small class="help-text">Upload your CV to get personalized questions tailored to your background</small>
+                    </div>
+                    
+                    <div class="upload-item">
+                        <label for="job-upload">Job Description (Required - PDF or Text)</label>
+                        <button id="job-upload" class="upload-btn">
+                            <span class="upload-icon">📋</span>
+                            Choose Job Description
+                        </button>
+                        <span id="job-filename" class="filename"></span>
+                        <small class="help-text">Required to generate relevant interview questions</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>⏱️ Interview Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label for="programming-language">Programming Language</label>
+                        <select id="programming-language">
+                            <option value="" disabled selected>Upload job description to detect languages...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="interview-type">Interview Focus</label>
+                        <select id="interview-type">
+                            <option value="coding" selected>Coding Challenges</option>
+                            <option value="theoretical">Theoretical Questions</option>
+                            <option value="mixed">Mixed (Coding + Theory)</option>
+                            <option value="system-design">System Design</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="duration">Interview Duration (minutes)</label>
+                        <select id="duration">
+                            <option value="15">15 minutes</option>
+                            <option value="30" selected>30 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60">60 minutes</option>
+                            <option value="90">90 minutes</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="question-count">Number of Questions</label>
+                        <select id="question-count">
+                            <option value="3">3 questions</option>
+                            <option value="5" selected>5 questions</option>
+                            <option value="7">7 questions</option>
+                            <option value="10">10 questions</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="ai-provider">AI Provider</label>
+                        <div class="provider-selector">
+                            <select id="ai-provider" title="Choose your preferred AI provider">
+                                <option value="lmstudio">LM Studio (Local)</option>
+                                <option value="ollama">Ollama (Local)</option>
+                                <option value="openai">OpenAI (Cloud)</option>
+                            </select>
+                            <button id="test-provider" class="btn btn-small" title="Test connection to selected provider">
+                                🧪
+                            </button>
+                        </div>
+                        <div class="provider-config" id="provider-config" style="display: none;">
+                            <input type="password" id="api-key" placeholder="Enter your OpenAI API key..." 
+                                   title="Required for OpenAI. Keep this secure!" style="margin-top: 8px;">
+                        </div>
+                        <div class="provider-status" id="provider-status">
+                            <span class="status-indicator">🔄</span>
+                            <span class="status-text">LM Studio (Default)</span>
+                        </div>
+                        <small class="help-text">LM Studio and Ollama run locally. OpenAI requires an API key and internet connection.</small>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="ai-model">AI Model</label>
+                        <div class="model-selector">
+                            <select id="ai-model" title="Available models from the selected provider">
+                                <option value="" disabled selected>Checking available models...</option>
+                            </select>
+                            <button id="refresh-models" class="btn btn-small" title="Refresh available models">
+                                🔄
+                            </button>
+                        </div>
+                        <div class="model-status" id="model-status">
+                            <span class="status-indicator">🔄</span>
+                            <span class="status-text">Loading models...</span>
+                        </div>
+                        <small class="help-text">Available models will update when you change the AI provider.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>💡 Additional Interview Details</h2>
+                <label for="additional-details">Specify any additional requirements, focus areas, or special instructions</label>
+                <div id="additional-details-editor"></div>
+            </div>
+
+            <div class="form-section">
+                <h2>🤖 AI Integration Status</h2>
+                <div class="ai-status">
+                    <div id="ai-connection-status" class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Checking AI provider connection...</span>
+                    </div>
+                    <p class="ai-instructions" id="ai-instructions">
+                        Choose an AI provider above and ensure it's properly configured
+                    </p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <div id="form-status" class="form-status">Please upload your CV and job description to begin</div>
+                <button id="generate-preview" class="btn btn-secondary">
+                    <span class="btn-icon">👁️</span>
+                    Preview Questions
+                </button>
+                <button id="start-interview" class="btn btn-primary" disabled>
+                    <span class="btn-icon">🚀</span>
+                    Start Mock Interview
+                </button>
+            </div>
+        </main>
+
+        <div id="preview-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📝 Generated Questions Preview</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="questions-preview"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="regenerate-questions" class="btn btn-secondary">Regenerate</button>
+                    <button id="proceed-interview" class="btn btn-primary">Proceed to Interview</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>Generating interview questions...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="../node_modules/codemirror/mode/markdown/markdown.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>

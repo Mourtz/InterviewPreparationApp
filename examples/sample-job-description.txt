@@ -1,0 +1,67 @@
+Job Title: Senior Full Stack Developer
+
+Company: TechInnovate Solutions
+Location: Remote / San Francisco, CA
+Employment Type: Full-time
+Salary: $120,000 - $150,000
+
+Job Description:
+We are seeking an experienced Senior Full Stack Developer to join our dynamic team. 
+You will be responsible for developing and maintaining our web applications, working 
+closely with product managers, designers, and other developers to deliver high-quality solutions.
+
+Key Responsibilities:
+- Design and develop scalable web applications using modern frameworks
+- Build responsive user interfaces with React and TypeScript
+- Develop robust backend APIs using Node.js and Express
+- Work with databases (PostgreSQL, Redis) to optimize performance
+- Implement automated testing and CI/CD pipelines
+- Collaborate in code reviews and maintain coding standards
+- Mentor junior developers and contribute to technical decisions
+- Participate in agile development processes and sprint planning
+
+Required Skills and Experience:
+- 4+ years of experience in full-stack web development
+- Proficiency in JavaScript/TypeScript and modern ES6+ features
+- Strong experience with React and its ecosystem (Redux, React Router)
+- Backend development experience with Node.js and Express.js
+- Database design and optimization skills (PostgreSQL preferred)
+- Experience with RESTful API design and implementation
+- Knowledge of version control systems (Git)
+- Understanding of web security best practices
+- Experience with testing frameworks (Jest, Cypress)
+- Familiarity with cloud platforms (AWS, GCP, or Azure)
+
+Preferred Qualifications:
+- Experience with containerization (Docker, Kubernetes)
+- Knowledge of microservices architecture
+- Experience with GraphQL
+- Familiarity with CI/CD tools (Jenkins, GitHub Actions)
+- Understanding of agile development methodologies
+- Experience with monitoring and logging tools
+- Bachelor's degree in Computer Science or related field
+
+What We Offer:
+- Competitive salary and equity package
+- Comprehensive health, dental, and vision insurance
+- Flexible work arrangements and remote work options
+- Professional development opportunities and conference attendance
+- Modern development tools and equipment
+- Collaborative and innovative work environment
+- Opportunities for career growth and advancement
+
+About TechInnovate Solutions:
+TechInnovate Solutions is a fast-growing technology company focused on creating 
+innovative software solutions for businesses. We value creativity, collaboration, 
+and continuous learning. Our team is passionate about using cutting-edge technologies 
+to solve real-world problems and make a positive impact.
+
+Application Process:
+To apply, please submit your resume, cover letter, and portfolio showcasing your 
+relevant projects. We are committed to creating an inclusive workplace and encourage 
+applications from candidates of all backgrounds.
+
+Equal Opportunity Employer:
+TechInnovate Solutions is an equal opportunity employer committed to diversity and 
+inclusion. We do not discriminate based on race, religion, color, national origin, 
+gender, sexual orientation, age, marital status, veteran status, or disability status.

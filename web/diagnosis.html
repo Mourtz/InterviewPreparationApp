@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Diagnosis</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .upload-item input[type="file"] { display: none; }
+        .upload-button { 
+            display: inline-block; 
+            padding: 10px 20px; 
+            background: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            margin: 10px 0;
+            border: none;
+        }
+        .upload-button:hover { background: #0056b3; }
+        .status { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 3px; }
+        .console-log { background: #f0f0f0; padding: 10px; margin: 5px 0; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Issue Diagnosis</h1>
+    
+    <div class="test-section">
+        <h2>Issue 1: File Upload Buttons</h2>
+        <p>Expected: Clicking buttons should open file dialogs</p>
+        
+        <input type="file" id="cv-file" accept=".txt,.pdf">
+        <button class="upload-button" id="cv-upload">📄 Choose CV/Resume File</button>
+        
+        <input type="file" id="job-file" accept=".txt,.pdf">
+        <button class="upload-button" id="job-upload">📋 Choose Job Description File</button>
+        
+        <div id="file-status" class="status">Click buttons to test file upload...</div>
+        <div id="file-console" class="console-log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Issue 2: LM Studio Detection</h2>
+        <p>Expected: Should detect LM Studio running on port 1234</p>
+        
+        <button class="upload-button" id="test-lm">🧪 Test LM Studio Connection</button>
+        <button class="upload-button" id="test-models">📋 Get Models List</button>
+        
+        <div id="lm-status" class="status">Click button to test LM Studio...</div>
+        <div id="lm-console" class="console-log"></div>
+    </div>
+
+    <script>
+        console.log('🔧 Diagnosis page loaded');
+        
+        function log(message, target = 'file-console') {
+            console.log(message);
+            const el = document.getElementById(target);
+            el.innerHTML += message + '<br>';
+        }
+        
+        // File Upload Test
+        const cvFile = document.getElementById('cv-file');
+        const jobFile = document.getElementById('job-file');
+        const cvUpload = document.getElementById('cv-upload');
+        const jobUpload = document.getElementById('job-upload');
+        const fileStatus = document.getElementById('file-status');
+        
+        log('Elements found - CV File: ' + !!cvFile + ', Job File: ' + !!jobFile);
+        log('Buttons found - CV Upload: ' + !!cvUpload + ', Job Upload: ' + !!jobUpload);
+        
+        cvUpload.addEventListener('click', function(e) {
+            log('CV upload button clicked!');
+            fileStatus.textContent = 'CV button clicked, opening file dialog...';
+            cvFile.click();
+            log('cvFile.click() executed');
+        });
+        
+        jobUpload.addEventListener('click', function(e) {
+            log('Job upload button clicked!');
+            fileStatus.textContent = 'Job button clicked, opening file dialog...';
+            jobFile.click();
+            log('jobFile.click() executed');
+        });
+        
+        cvFile.addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                const msg = 'CV file selected: ' + e.target.files[0].name;
+                log(msg);
+                fileStatus.textContent = msg;
+                fileStatus.style.background = '#d4edda';
+            }
+        });
+        
+        jobFile.addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                const msg = 'Job file selected: ' + e.target.files[0].name;
+                log(msg);
+                fileStatus.textContent = msg;
+                fileStatus.style.background = '#d4edda';
+            }
+        });
+        
+        // LM Studio Test
+        const testLM = document.getElementById('test-lm');
+        const testModels = document.getElementById('test-models');
+        const lmStatus = document.getElementById('lm-status');
+        
+        testLM.addEventListener('click', async function() {
+            log('Testing LM Studio connection...', 'lm-console');
+            lmStatus.textContent = 'Testing connection...';
+            lmStatus.style.background = '#fff3cd';
+            
+            try {
+                const response = await fetch('http://127.0.0.1:1234/v1/models', {
+                    signal: AbortSignal.timeout(5000)
+                });
+                
+                log('Response status: ' + response.status, 'lm-console');
+                
+                if (response.ok) {
+                    lmStatus.textContent = '✅ LM Studio connected!';
+                    lmStatus.style.background = '#d4edda';
+                    log('✅ LM Studio connection successful', 'lm-console');
+                } else {
+                    lmStatus.textContent = '❌ LM Studio error: ' + response.status;
+                    lmStatus.style.background = '#f8d7da';
+                    log('❌ LM Studio returned error: ' + response.status, 'lm-console');
+                }
+            } catch (error) {
+                log('❌ LM Studio error: ' + error.message, 'lm-console');
+                if (error.name === 'TimeoutError') {
+                    lmStatus.textContent = '❌ Timeout - is LM Studio running?';
+                } else if (error.message.includes('fetch')) {
+                    lmStatus.textContent = '❌ Cannot reach LM Studio (not running?)';
+                } else {
+                    lmStatus.textContent = '❌ Connection failed: ' + error.message;
+                }
+                lmStatus.style.background = '#f8d7da';
+            }
+        });
+        
+        testModels.addEventListener('click', async function() {
+            log('Getting models list...', 'lm-console');
+            
+            try {
+                const response = await fetch('http://127.0.0.1:1234/v1/models');
+                if (response.ok) {
+                    const data = await response.json();
+                    log('Models data: ' + JSON.stringify(data, null, 2), 'lm-console');
+                    lmStatus.textContent = `Found ${data.data?.length || 0} models`;
+                    lmStatus.style.background = '#d4edda';
+                } else {
+                    log('Failed to get models: ' + response.status, 'lm-console');
+                }
+            } catch (error) {
+                log('Models request failed: ' + error.message, 'lm-console');
+            }
+        });
+        
+        log('Event listeners attached');
+        log('Ready for testing');
+    </script>
+</body>
+</html>

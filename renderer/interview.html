@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview Session</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/theme/material-darker.css">
+</head>
+<body class="interview-body">
+    <div class="interview-container">
+        <header class="interview-header">
+            <div class="interview-info">
+                <h1>🎯 Mock Technical Interview</h1>
+                <div class="interview-details">
+                    <span id="interview-language" class="interview-detail">Language: Python</span>
+                    <span id="interview-type" class="interview-detail">Type: Coding Challenges</span>
+                </div>
+                <div class="interview-timer">
+                    <span class="timer-label">Time Remaining:</span>
+                    <span id="timer" class="timer-display">30:00</span>
+                </div>
+            </div>
+            <div class="interview-progress">
+                <span class="progress-label">Question <span id="current-question">1</span> of <span id="total-questions">5</span></span>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="interview-main">
+            <div class="question-panel">
+                <div class="question-header">
+                    <h2>📝 Question</h2>
+                    <div class="question-actions">
+                        <button id="speak-question" class="btn btn-small">🔊 Read Aloud</button>
+                    </div>
+                </div>
+                <div id="question-content" class="question-content">
+                    Loading question...
+                </div>
+            </div>
+
+            <div class="answer-panel">
+                <div class="answer-header">
+                    <h2>💡 Your Answer</h2>
+                    <div class="answer-actions">
+                        <button id="toggle-mode" class="btn btn-small">📝 Switch to Text Mode</button>
+                        <!-- Code testing removed - this is for practicing coding challenges, not running code -->
+                    </div>
+                </div>
+                <div id="answer-editor" class="answer-editor"></div>
+                <!-- Code execution output removed - this app is for practicing coding challenges, not testing code -->
+                <div class="answer-controls">
+                    <button id="save-answer" class="btn btn-secondary">💾 Save Answer</button>
+                    <button id="next-question" class="btn btn-primary">➡️ Next Question</button>
+                </div>
+            </div>
+        </main>
+
+        <aside class="interview-sidebar">
+            <div class="notes-section">
+                <h3>📋 Notes</h3>
+                <div id="notes-editor" class="notes-editor"></div>
+            </div>
+            
+            <div class="controls-section">
+                <h3>🎛️ Controls</h3>
+                <button id="pause-interview" class="btn btn-secondary">⏸️ Pause</button>
+                <button id="end-interview" class="btn btn-warning">🏁 End Interview</button>
+            </div>
+
+            <div class="questions-list">
+                <h3>❓ Questions</h3>
+                <div id="questions-overview" class="questions-overview">
+                    <!-- Questions will be populated here -->
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- End Interview Modal -->
+    <div id="end-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🏁 End Interview</h3>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to end the interview? Your progress will be saved and evaluated.</p>
+                <div class="completion-stats">
+                    <p><strong>Questions Answered:</strong> <span id="answered-count">0</span> of <span id="total-count">5</span></p>
+                    <p><strong>Time Used:</strong> <span id="time-used">0:00</span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-end" class="btn btn-secondary">Cancel</button>
+                <button id="confirm-end" class="btn btn-primary">End & Get Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="results-modal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>📊 Interview Results & Feedback</h3>
+            </div>
+            <div class="modal-body">
+                <div class="results-content">
+                    <div class="score-section">
+                        <div class="score-display">
+                            <div class="score-circle">
+                                <span id="score-value">--</span>
+                                <span class="score-label">/ 100</span>
+                            </div>
+                            <div class="pass-fail">
+                                <span id="pass-fail-status">Evaluating...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-section">
+                        <h4>🎯 Detailed Feedback</h4>
+                        <div id="feedback-content" class="feedback-content">
+                            <div class="loading-feedback">
+                                <div class="spinner"></div>
+                                <p>AI is evaluating your performance...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="export-results" class="btn btn-secondary">📄 Export Results</button>
+                <button id="new-interview" class="btn btn-primary">🔄 New Interview</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
+    <script src="../node_modules/codemirror/mode/python/python.js"></script>
+    <script src="../node_modules/codemirror/mode/clike/clike.js"></script>
+    <script src="../node_modules/codemirror/mode/go/go.js"></script>
+    <script src="../node_modules/codemirror/mode/rust/rust.js"></script>
+    <script src="../node_modules/codemirror/mode/php/php.js"></script>
+    <script src="../node_modules/codemirror/mode/ruby/ruby.js"></script>
+    <script src="../node_modules/codemirror/mode/swift/swift.js"></script>
+    <script src="../node_modules/codemirror/mode/sql/sql.js"></script>
+    <script src="../node_modules/codemirror/mode/markdown/markdown.js"></script>
+    <script src="../shared/copyProtection.js"></script>
+    <script src="interview.js"></script>
+</body>
+</html>

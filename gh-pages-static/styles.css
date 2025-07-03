@@ -1,0 +1,71 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    color: #222;
+}
+.container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    padding: 32px 24px 16px 24px;
+}
+header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+    color: #4a5568;
+}
+header p {
+    font-size: 1.1rem;
+    color: #555;
+}
+.download-section, .web-section {
+    margin-bottom: 32px;
+    text-align: center;
+}
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 24px 0;
+}
+.btn {
+    display: inline-block;
+    padding: 14px 28px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.08);
+    cursor: pointer;
+}
+.btn-win { background: #2563eb; }
+.btn-win:hover { background: #1e40af; }
+.btn-mac { background: #6d28d9; }
+.btn-mac:hover { background: #4c1d95; }
+.btn-linux { background: #059669; }
+.btn-linux:hover { background: #065f46; }
+.btn-web { background: #f59e42; color: #222; }
+.btn-web:hover { background: #d97706; color: #fff; }
+footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+    margin-top: 24px;
+}
+footer a { color: #667eea; text-decoration: underline; }
+@media (max-width: 600px) {
+    .container { padding: 12px 4px; }
+    .button-group { gap: 10px; }
+    .btn { padding: 12px 8px; font-size: 0.98rem; }
+}

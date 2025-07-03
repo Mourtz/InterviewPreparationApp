@@ -1,0 +1,54 @@
+John Smith
+Software Developer
+
+Contact Information:
+Email: john.smith@email.com
+Phone: (555) 123-4567
+LinkedIn: linkedin.com/in/johnsmith
+
+Professional Summary:
+Experienced software developer with 5 years of experience in full-stack web development. 
+Proficient in JavaScript, React, Node.js, and Python. Strong background in creating 
+scalable web applications and working in agile development environments.
+
+Technical Skills:
+- Programming Languages: JavaScript, Python, Java, TypeScript
+- Frontend: React, Vue.js, HTML5, CSS3, Bootstrap
+- Backend: Node.js, Express.js, Django, REST APIs
+- Databases: MongoDB, PostgreSQL, MySQL
+- Cloud Services: AWS, Docker, Kubernetes
+- Version Control: Git, GitHub, GitLab
+- Testing: Jest, Cypress, Unit Testing
+- Tools: VSCode, Jira, Slack
+
+Professional Experience:
+
+Senior Software Developer | TechCorp Inc. | 2021 - Present
+- Led development of customer-facing web applications using React and Node.js
+- Implemented microservices architecture resulting in 40% performance improvement
+- Collaborated with cross-functional teams to deliver features on schedule
+- Mentored junior developers and conducted code reviews
+
+Software Developer | StartupXYZ | 2019 - 2021
+- Developed responsive web applications using modern JavaScript frameworks
+- Built RESTful APIs and integrated third-party services
+- Participated in agile development processes and sprint planning
+- Optimized database queries resulting in 25% faster load times
+
+Education:
+Bachelor of Science in Computer Science
+University of Technology | 2015 - 2019
+GPA: 3.7/4.0
+
+Projects:
+- E-commerce Platform: Built full-stack application with React, Node.js, and MongoDB
+- Task Management App: Created collaborative tool using Vue.js and Django
+- Weather Dashboard: Developed real-time weather app using APIs and responsive design
+
+Certifications:
+- AWS Certified Developer Associate
+- MongoDB Certified Developer
+
+Languages:
+- English (Native)
+- Spanish (Conversational)

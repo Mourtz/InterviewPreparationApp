@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload Test</title>
+    <style>
+        .upload-item input[type="file"] {
+            display: none;
+        }
+        .upload-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .upload-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Upload Test</h1>
+    
+    <div class="upload-item">
+        <input type="file" id="test-file" accept=".txt,.pdf">
+        <div class="upload-button" id="test-upload">Click to Upload File</div>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        console.log('🧪 File upload test starting...');
+        
+        const fileInput = document.getElementById('test-file');
+        const uploadButton = document.getElementById('test-upload');
+        const status = document.getElementById('status');
+        
+        // Test if elements exist
+        console.log('File input:', fileInput);
+        console.log('Upload button:', uploadButton);
+        
+        uploadButton.addEventListener('click', function(e) {
+            console.log('Upload button clicked!');
+            status.textContent = 'Button clicked, triggering file input...';
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', function(e) {
+            console.log('File selected:', e.target.files[0]);
+            if (e.target.files[0]) {
+                status.textContent = 'File selected: ' + e.target.files[0].name;
+            }
+        });
+        
+        console.log('Event listeners added');
+    </script>
+</body>
+</html>
