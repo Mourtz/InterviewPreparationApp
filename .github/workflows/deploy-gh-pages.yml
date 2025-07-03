@@ -23,13 +23,18 @@ jobs:
 
       - name: Build web app
         run: |
-          npm run build-web || echo 'No web build step needed.'
+          cd web
+          npm install
+          npm run build-static
 
       - name: Copy static files
         run: |
           mkdir -p deploy
           cp -r gh-pages-static/* deploy/
-          if [ -d web/dist ]; then cp -r web/dist/* deploy/; fi
+          if [ -d web/dist ]; then 
+            mkdir -p deploy/app
+            cp -r web/dist/* deploy/app/
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

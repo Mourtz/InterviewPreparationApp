@@ -6,7 +6,8 @@ const path = require('path');
 const distDir = path.join(__dirname, 'dist');
 const sourceFiles = [
     'index.html',
-    'app.js', 
+    'app.js',
+    'copyProtection.js',
     'styles.css'
 ];
 
