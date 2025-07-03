@@ -1,19 +1,66 @@
-# Interview Preparation App – Web Version
+# Interview Preparation App – Web & Desktop Version
 
-A browser-based app for AI-powered mock technical interviews. Supports OpenAI (cloud), LM Studio (local), and Ollama (local) as AI providers.
+A powerful application for AI-powered mock technical interviews. Available as both a web app and desktop application. Supports OpenAI (cloud), LM Studio (local), and Ollama (local) as AI providers.
 
-### > The development of this app was was done in 1 day with the help of an AI agent, showcasing the power of AI in rapid development.
+### > The development of this app was done in 1 day with the help of an AI agent, showcasing the power of AI in rapid development.
 
 ## 🚀 Features
 - **AI Providers:** OpenAI (GPT-3.5/4), LM Studio, Ollama
 - **Smart Question Generation:** Tailored coding challenges and theory questions
 - **Automated Evaluation:** AI-powered feedback and scoring
-- **PDF/Text Upload:** Extracts from CVs and job descriptions (processed in-browser)
+- **PDF/Text Upload:** Extracts from CVs and job descriptions
 - **Language Detection:** Auto-detects programming languages from job description
 - **Code Editor:** Syntax highlighting for major languages
 - **Timer & Navigation:** Real-time countdown, easy question switching
 - **Auto-save & Export:** Answers saved as you type, export results as JSON
 - **Responsive & Accessible:** Works on desktop/mobile, keyboard/screen reader friendly
+- **Cross-Platform:** Windows, macOS, Linux support
+
+## 📦 Download & Installation
+
+### Desktop Application (Recommended)
+Download pre-built packages from the [Releases](https://github.com/your-repo/releases) page:
+
+- **Windows:** `.exe` installer or portable version
+- **macOS:** `.dmg` installer
+- **Linux:** `.tar.xz` archive
+
+### Build from Source
+```bash
+# Clone and install
+git clone <repository-url>
+cd InterviewPreparationApp
+npm install
+
+# Desktop app
+npm start
+
+# Web version
+cd web
+npm install
+npm start
+```
+
+## 🏗️ Building
+
+### Desktop Builds
+```bash
+# Build for current platform
+npm run build
+
+# Platform-specific builds
+npm run build:win          # Windows
+npm run build:mac          # macOS
+npm run build:linux:safe   # Linux (Windows-friendly)
+```
+
+### Web Deployment
+```bash
+cd web
+npm run build-static       # Creates static files for deployment
+```
+
+See [BUILD_GUIDE.md](BUILD_GUIDE.md) for detailed build instructions and troubleshooting.
 
 ## ⚡ Quick Start (Web Version)
 1. **Install Node.js** (v14+)
