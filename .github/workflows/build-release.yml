@@ -119,7 +119,7 @@ jobs:
       - name: Upload Windows Installer
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./windows-builds/Interview Preparation App-${{ github.ref_name }}-win-x64.exe
@@ -129,7 +129,7 @@ jobs:
       - name: Upload Windows Portable
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./windows-builds/Interview Preparation App-${{ github.ref_name }}-win-x64.zip
@@ -139,7 +139,7 @@ jobs:
       - name: Upload macOS DMG
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./macos-builds/Interview Preparation App-${{ github.ref_name }}-mac-x64.dmg
@@ -149,7 +149,7 @@ jobs:
       - name: Upload macOS ZIP
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./macos-builds/Interview Preparation App-${{ github.ref_name }}-mac-x64.zip
@@ -159,7 +159,7 @@ jobs:
       - name: Upload Linux Archive
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./linux-builds/Interview Preparation App-${{ github.ref_name }}-linux-x64.tar.xz
