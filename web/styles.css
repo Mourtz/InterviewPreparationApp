@@ -9,21 +9,27 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    height: 100vh;
     color: #333;
     line-height: 1.6;
+    overflow: hidden;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     color: white;
+    flex-shrink: 0;
 }
 
 header h1 {
@@ -43,11 +49,15 @@ header p {
     border-radius: 15px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    margin-bottom: 20px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-section {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .form-section h2 {
@@ -89,6 +99,78 @@ header p {
 .openai-config small {
     color: #666;
     font-size: 0.85rem;
+}
+
+/* AI Configuration Styles */
+.ai-config {
+    display: grid;
+    gap: 20px;
+}
+
+.ai-config .setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.provider-selector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.provider-selector select {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.provider-config {
+    margin-top: 10px;
+}
+
+.provider-config input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.provider-status,
+.model-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+.model-selector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.model-selector select {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.help-text {
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 5px;
 }
 
 /* AI Status */
@@ -239,7 +321,9 @@ header p {
     flex-direction: column;
     align-items: center;
     gap: 15px;
-    margin-top: 30px;
+    margin-top: auto;
+    padding-top: 20px;
+    flex-shrink: 0;
 }
 
 .form-status {
@@ -620,6 +704,10 @@ header p {
     border-radius: 15px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .results-section.hidden {
