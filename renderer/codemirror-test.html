@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CodeMirror Test</title>
+    <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../node_modules/codemirror/theme/material-darker.css">
+</head>
+<body>
+    <h1>CodeMirror Test</h1>
+    <div id="test-editor"></div>
+    
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
+    <script src="../node_modules/codemirror/mode/python/python.js"></script>
+    <script>
+        console.log('Testing CodeMirror initialization...');
+        
+        const editor = CodeMirror(document.getElementById('test-editor'), {
+            mode: 'python',
+            theme: 'material-darker',
+            lineNumbers: true,
+            lineWrapping: true,
+            value: 'print("Hello, World!")\n\n# Type here to test...',
+            autofocus: true,
+            readOnly: false
+        });
+        
+        console.log('CodeMirror editor created:', editor);
+        console.log('Editor mode:', editor.getOption('mode'));
+        console.log('Editor readOnly:', editor.getOption('readOnly'));
+        
+        // Test setting value
+        setTimeout(() => {
+            editor.focus();
+            console.log('Editor focused');
+        }, 100);
+    </script>
+</body>
+</html>

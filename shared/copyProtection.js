@@ -235,76 +235,123 @@ function disableDevTools() {
  * Applies copy protection to CodeMirror editor instances
  */
 function protectCodeMirrorEditor(editor) {
-    if (!editor || !isProductionBuild()) return;
+    if (!editor || !isProductionBuild()) {
+        console.log('🛡️ Editor protection skipped - development mode or no editor');
+        return;
+    }
     
     console.log('🛡️ Applying copy protection to CodeMirror editor');
     
-    // Override copy/paste commands - block ALL copy operations in release builds
+    // Override copy/paste commands - Allow normal editing but block bulk copying
     editor.addKeyMap({
         'Ctrl-C': (cm) => {
-            console.log('🚫 Copy operation blocked in release build');
-            showCopyProtectionMessage();
-            return false;
+            // Allow copying small selections (< 100 chars) but block large text blocks
+            const selection = cm.getSelection();
+            if (selection.length > 100) {
+                console.log('🚫 Large copy operation blocked in release build');
+                showCopyProtectionMessage();
+                return false;
+            }
+            // Allow small copies for normal editing
+            return true;
         },
         'Ctrl-A': (cm) => {
-            console.log('🚫 Select all blocked in release build');
-            showCopyProtectionMessage();
-            return false;
+            // Allow select all in answer editors, block in question content
+            const wrapper = cm.getWrapperElement();
+            if (wrapper && wrapper.closest('#question-content')) {
+                console.log('🚫 Select all blocked in question content');
+                showCopyProtectionMessage();
+                return false;
+            }
+            // Allow select all in answer editors
+            return true;
         },
         'Ctrl-X': (cm) => {
-            console.log('🚫 Cut operation blocked in release build');
-            showCopyProtectionMessage();
-            return false;
+            // Allow cut for normal editing
+            const selection = cm.getSelection();
+            if (selection.length > 100) {
+                console.log('🚫 Large cut operation blocked in release build');
+                showCopyProtectionMessage();
+                return false;
+            }
+            return true;
         },
-        'Ctrl-V': () => false, // Allow paste for user input
-        'Ctrl-S': () => false, // Block save shortcuts
+        'Ctrl-V': () => true, // Always allow paste
+        // Remove the Ctrl-S block - this was interfering with save functionality
         'F12': () => false,
         'Ctrl-Shift-I': () => false,
         'Ctrl-Shift-J': () => false,
         'Ctrl-U': () => false,
-        'Cmd-C': (cm) => { // Mac support
-            console.log('🚫 Copy operation blocked in release build (Mac)');
-            showCopyProtectionMessage();
-            return false;
+        // Mac support with same logic
+        'Cmd-C': (cm) => {
+            const selection = cm.getSelection();
+            if (selection.length > 100) {
+                console.log('🚫 Large copy operation blocked in release build (Mac)');
+                showCopyProtectionMessage();
+                return false;
+            }
+            return true;
         },
         'Cmd-A': (cm) => {
-            console.log('🚫 Select all blocked in release build (Mac)');
-            showCopyProtectionMessage();
-            return false;
+            const wrapper = cm.getWrapperElement();
+            if (wrapper && wrapper.closest('#question-content')) {
+                console.log('🚫 Select all blocked in question content (Mac)');
+                showCopyProtectionMessage();
+                return false;
+            }
+            return true;
         },
         'Cmd-X': (cm) => {
-            console.log('🚫 Cut operation blocked in release build (Mac)');
-            showCopyProtectionMessage();
-            return false;
+            const selection = cm.getSelection();
+            if (selection.length > 100) {
+                console.log('🚫 Large cut operation blocked in release build (Mac)');
+                showCopyProtectionMessage();
+                return false;
+            }
+            return true;
         }
     });
     
-    // Disable text selection on the editor wrapper for questions only
+    // Only apply strict protection to question content, not answer editors
     const wrapper = editor.getWrapperElement();
     if (wrapper) {
-        disableContextMenu([wrapper]);
+        // Check if this is a question content editor
+        const isQuestionContent = wrapper.closest('#question-content');
         
-        // For answer editors, allow typing but prevent copying
-        wrapper.addEventListener('mousedown', (e) => {
-            // Allow clicking for cursor placement but prevent text selection
-            if (e.detail > 1) { // Double-click or triple-click
-                e.preventDefault();
-                return false;
-            }
-        });
+        if (isQuestionContent) {
+            // Strict protection for question content
+            disableContextMenu([wrapper]);
+            wrapper.addEventListener('mousedown', (e) => {
+                if (e.detail > 1) { // Double-click or triple-click
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        } else {
+            // Minimal protection for answer editors - allow normal use
+            console.log('🛡️ Applying minimal protection to answer editor');
+        }
     }
     
-    // Override clipboard operations
+    // Override clipboard operations but only for large selections
     editor.on('copy', (cm) => {
-        console.log('🚫 CodeMirror copy event blocked');
-        showCopyProtectionMessage();
-        return false;
+        const selection = cm.getSelection();
+        if (selection.length > 100) {
+            console.log('🚫 Large copy event blocked');
+            showCopyProtectionMessage();
+            return false;
+        }
+        return true;
     });
     
     editor.on('cut', (cm) => {
-        console.log('🚫 CodeMirror cut event blocked');
-        showCopyProtectionMessage();
-        return false;
+        const selection = cm.getSelection();
+        if (selection.length > 100) {
+            console.log('🚫 Large cut event blocked');
+            showCopyProtectionMessage();
+            return false;
+        }
+        return true;
     });
     
     // Block large text selections - prevent copying entire questions/answers

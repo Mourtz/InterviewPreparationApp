@@ -320,6 +320,7 @@ function initializeEditors() {
         autoCloseBrackets: true,
         matchBrackets: true,
         showCursorWhenSelecting: true,
+        readOnly: false, // Ensure editor is not read-only
         extraKeys: {
             "Tab": function(cm) {
                 if (cm.somethingSelected()) {
@@ -330,6 +331,45 @@ function initializeEditors() {
             }
         }
     });
+    
+    // Debug: Ensure editor is properly initialized
+    console.log('📝 Answer editor initialized:', answerEditor ? 'SUCCESS' : 'FAILED');
+    console.log('📝 Editor mode:', answerEditor.getOption('mode'));
+    console.log('📝 Editor readOnly:', answerEditor.getOption('readOnly'));
+    
+    // Force focus on the answer editor after a short delay
+    setTimeout(() => {
+        if (answerEditor && typeof answerEditor.focus === 'function') {
+            answerEditor.refresh(); // Refresh the editor to ensure proper display
+            answerEditor.focus();
+            console.log('📝 Answer editor refreshed and focused');
+            
+            // Test if the editor is responsive
+            try {
+                answerEditor.setValue(''); // Clear any initial content
+                answerEditor.setOption('readOnly', false); // Ensure not read-only
+                console.log('📝 Answer editor test: can set value and is not read-only');
+                
+                // Add global click handler to ensure editor is always accessible
+                const editorWrapper = answerEditor.getWrapperElement();
+                if (editorWrapper) {
+                    editorWrapper.addEventListener('click', () => {
+                        answerEditor.focus();
+                    });
+                    
+                    // Make sure the editor wrapper is focusable
+                    editorWrapper.setAttribute('tabindex', '0');
+                    
+                    // Test typing by programmatically adding a character and removing it
+                    answerEditor.replaceRange('test', {line: 0, ch: 0});
+                    answerEditor.replaceRange('', {line: 0, ch: 0}, {line: 0, ch: 4});
+                    console.log('📝 Answer editor typing test: SUCCESS');
+                }
+            } catch (error) {
+                console.error('📝 Answer editor test failed:', error);
+            }
+        }
+    }, 500); // Increased delay to ensure DOM is fully ready
     
     // Update toggle button text
     const toggleButton = document.getElementById('toggle-mode');
@@ -346,7 +386,9 @@ function initializeEditors() {
     });
     
     // Apply copy protection to editors in release builds
+    // Now using improved copy protection that allows normal editing
     if (typeof protectEditors === 'function') {
+        console.log('🛡️ Applying improved copy protection - answer editor remains fully functional');
         protectEditors(answerEditor, notesEditor);
     }
 }
@@ -506,6 +548,21 @@ function loadQuestion(index) {
     } else {
         answerEditor.setValue('');
     }
+    
+    // Ensure the editor is ready for input
+    setTimeout(() => {
+        answerEditor.refresh();
+        answerEditor.focus();
+        console.log('📝 Answer editor refreshed and focused for question', index + 1);
+        
+        // Add click handler to ensure focus when clicked
+        const editorWrapper = answerEditor.getWrapperElement();
+        if (editorWrapper) {
+            editorWrapper.addEventListener('click', () => {
+                answerEditor.focus();
+            });
+        }
+    }, 100);
     
     // Update questions overview
     updateQuestionsOverview();
