@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Preparation App - Web Version</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Mock Technical Interview Preparation</h1>
+            <p>Prepare for your technical interviews with AI-powered mock sessions (Web Version)</p>
+        </header>
+
+        <main class="setup-form">
+            <div class="form-section">
+                <h2>🤖 AI Provider Configuration</h2>
+                <div class="ai-config">
+                    <div class="setting-item">
+                        <label for="ai-provider">AI Provider</label>
+                        <div class="provider-selector">
+                            <select id="ai-provider" title="Choose your preferred AI provider">
+                                <option value="lmstudio" selected>LM Studio (Local)</option>
+                                <option value="ollama">Ollama (Local)</option>
+                                <option value="openai">OpenAI (Cloud)</option>
+                            </select>
+                            <button id="test-provider" class="btn btn-small" title="Test connection to selected provider">
+                                🔬 Test
+                            </button>
+                        </div>
+                        <div class="provider-config" id="provider-config">
+                            <input type="password" id="api-key" placeholder="Enter your OpenAI API key..." 
+                                   title="Required for OpenAI provider">
+                        </div>
+                        <div class="provider-status" id="provider-status">
+                            <span class="status-indicator">🔄</span>
+                            <span class="status-text">Select and test your AI provider</span>
+                        </div>
+                        <small class="help-text">LM Studio and Ollama run locally. OpenAI requires an API key and internet connection.</small>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="ai-model">AI Model</label>
+                        <div class="model-selector">
+                            <select id="ai-model" title="Available models from the selected provider">
+                                <option value="" disabled selected>Checking available models...</option>
+                            </select>
+                            <button id="refresh-models" class="btn btn-small" title="Refresh available models">
+                                🔄
+                            </button>
+                        </div>
+                        <div class="model-status" id="model-status">
+                            <span class="status-indicator">🔄</span>
+                            <span class="status-text">Loading models...</span>
+                        </div>
+                        <small class="help-text">Available models will update when you change the AI provider.</small>
+                    </div>
+                    
+                    <div class="ai-status">
+                        <span id="ai-status-indicator" class="status-indicator disconnected"></span>
+                        <span id="ai-status-text">Select AI provider and test connection</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>📄 Upload Documents</h2>
+                <div class="upload-area">
+                    <div class="upload-item">
+                        <label for="cv-file">📄 CV/Resume (Optional)</label>
+                        <input type="file" id="cv-file" accept=".txt,.pdf">
+                        <div class="upload-button" id="cv-upload">
+                            <span class="upload-icon">📄</span>
+                            <span>Choose CV/Resume File</span>
+                        </div>
+                        <div id="cv-filename" class="filename"></div>
+                    </div>
+                    
+                    <div class="upload-item">
+                        <label for="job-file">📋 Job Description (Required)</label>
+                        <input type="file" id="job-file" accept=".txt,.pdf">
+                        <div class="upload-button" id="job-upload">
+                            <span class="upload-icon">📋</span>
+                            <span>Choose Job Description File</span>
+                        </div>
+                        <div id="job-filename" class="filename"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>⏱️ Interview Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label for="duration">Duration</label>
+                        <select id="duration">
+                            <option value="15">15 minutes</option>
+                            <option value="30" selected>30 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60">60 minutes</option>
+                            <option value="90">90 minutes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <label for="question-count">Number of Questions</label>
+                        <select id="question-count">
+                            <option value="3">3 questions</option>
+                            <option value="5" selected>5 questions</option>
+                            <option value="7">7 questions</option>
+                            <option value="10">10 questions</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="programming-language">Programming Language</label>
+                        <select id="programming-language">
+                            <option value="" disabled selected>Select programming language...</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="typescript">TypeScript</option>
+                            <option value="csharp">C#</option>
+                            <option value="cpp">C++</option>
+                            <option value="go">Go</option>
+                            <option value="rust">Rust</option>
+                            <option value="php">PHP</option>
+                            <option value="ruby">Ruby</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-item">
+                        <label for="difficulty">Difficulty Level</label>
+                        <select id="difficulty">
+                            <option value="junior">Junior (0-2 years)</option>
+                            <option value="mid" selected>Mid-level (2-5 years)</option>
+                            <option value="senior">Senior (5+ years)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>💡 Additional Interview Details</h2>
+                <label for="additional-details">Specify any additional requirements, focus areas, or special instructions</label>
+                <div id="additional-details-editor"></div>
+            </div>
+
+            <div class="action-buttons">
+                <div id="form-status" class="form-status">Configure AI provider and upload job description to begin</div>
+                <button id="start-interview" class="btn btn-primary" disabled>
+                    🚀 Start Interview
+                </button>
+            </div>
+        </main>
+
+        <!-- Interview Section (Hidden initially) -->
+        <div id="interview-section" class="interview-section hidden">
+            <div class="interview-header">
+                <div class="timer-section">
+                    <div id="timer" class="timer">00:00</div>
+                    <div class="progress-bar">
+                        <div id="progress" class="progress"></div>
+                    </div>
+                </div>
+                <div class="interview-controls">
+                    <button id="end-interview" class="btn btn-danger">⏹️ End Interview</button>
+                </div>
+            </div>
+
+            <div class="interview-content">
+                <!-- Question Display -->
+                <div class="question-section">
+                    <div class="question-header">
+                        <h2 id="question-title">Question 1 of 5</h2>
+                        <div class="question-progress">
+                            <div id="question-list" class="progress-dots"></div>
+                        </div>
+                        <button id="speak-question" class="btn btn-small">🔊 Read Question</button>
+                    </div>
+                    
+                    <div class="question-container">
+                        <div id="question-content" class="question-text"></div>
+                    </div>
+                </div>
+
+                <!-- Answer Section -->
+                <div class="answer-section">
+                    <div class="answer-header">
+                        <h3>Your Answer:</h3>
+                        <div class="answer-controls">
+                            <select id="editor-mode" title="Select code editor mode">
+                                <option value="text">Text Mode</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="answer-editor" class="answer-editor"></div>
+                    
+                    <div class="answer-footer">
+                        <div class="notes-section">
+                            <label for="notes">Quick Notes:</label>
+                            <textarea id="notes" placeholder="Jot down thoughts, approach, or key points..."></textarea>
+                        </div>
+                        
+                        <div class="navigation-buttons">
+                            <button id="save-answer" class="btn btn-secondary">💾 Save Answer</button>
+                            <button id="next-question" class="btn btn-primary">Next Question ➡️</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden initially) -->
+        <div id="results-section" class="results-section hidden">
+            <div class="results-header">
+                <h2>📊 Interview Results</h2>
+            </div>
+            <div class="results-content">
+                <div class="score-section">
+                    <div id="score-display" class="score-display">
+                        <div class="score-circle">
+                            <span id="score-value">--</span>
+                            <span class="score-label">Score</span>
+                        </div>
+                        <div id="pass-fail" class="pass-fail">Evaluating...</div>
+                    </div>
+                </div>
+                
+                <div class="feedback-section">
+                    <h3>🎯 Detailed Feedback</h3>
+                    <div id="feedback-content" class="feedback-content">
+                        <div class="loading-feedback">
+                            <div class="spinner"></div>
+                            <p>AI is evaluating your performance...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button id="export-results" class="btn btn-secondary">📄 Export Results</button>
+                    <button id="new-interview" class="btn btn-primary">🔄 New Interview</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p id="loading-text">Processing...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/go/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="copyProtection.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
