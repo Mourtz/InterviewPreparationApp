@@ -54,6 +54,7 @@
                 <div id="answer-editor" class="answer-editor"></div>
                 <!-- Code execution output removed - this app is for practicing coding challenges, not testing code -->
                 <div class="answer-controls">
+                    <button id="prev-question" class="btn btn-secondary" disabled>⬅️ Previous Question</button>
                     <button id="save-answer" class="btn btn-secondary">💾 Save Answer</button>
                     <button id="next-question" class="btn btn-primary">➡️ Next Question</button>
                 </div>
@@ -70,10 +71,29 @@
                 <h3>🎛️ Controls</h3>
                 <button id="pause-interview" class="btn btn-secondary">⏸️ Pause</button>
                 <button id="end-interview" class="btn btn-warning">🏁 End Interview</button>
+                
+                <div class="shortcuts-help">
+                    <h4>⌨️ Shortcuts</h4>
+                    <div class="shortcut-item">
+                        <strong>Ctrl/Cmd + S:</strong> Save Answer
+                    </div>
+                    <div class="shortcut-item">
+                        <strong>Ctrl/Cmd + Enter:</strong> Next Question
+                    </div>
+                    <div class="shortcut-item">
+                        <strong>Alt + ←/→:</strong> Navigate Questions
+                    </div>
+                    <div class="shortcut-item">
+                        <strong>Ctrl/Cmd + P:</strong> Pause/Resume
+                    </div>
+                </div>
             </div>
 
             <div class="questions-list">
                 <h3>❓ Questions</h3>
+                <div class="question-navigation-help">
+                    <small>✨ Navigate sequentially - previous questions remain accessible</small>
+                </div>
                 <div id="questions-overview" class="questions-overview">
                     <!-- Questions will be populated here -->
                 </div>

@@ -356,6 +356,12 @@ function setupEventListeners() {
     document.getElementById('next-question').addEventListener('click', nextQuestion);
     document.getElementById('save-answer').addEventListener('click', saveCurrentAnswer);
     
+    // Add previous question button if it exists
+    const prevButton = document.getElementById('prev-question');
+    if (prevButton) {
+        prevButton.addEventListener('click', previousQuestion);
+    }
+    
     // Editor mode toggle
     document.getElementById('toggle-mode').addEventListener('click', toggleEditorMode);
     
@@ -392,6 +398,25 @@ function handleKeyboardShortcuts(event) {
             case 'p':
                 event.preventDefault();
                 togglePause();
+                break;
+            case 'ArrowLeft':
+                event.preventDefault();
+                previousQuestion();
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                nextQuestion();
+                break;
+        }
+    } else if (event.altKey) {
+        switch (event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                previousQuestion();
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                nextQuestion();
                 break;
         }
     }
@@ -434,6 +459,10 @@ function loadQuestion(index) {
     }
     
     currentQuestionIndex = index;
+    
+    // Track the highest question reached to prevent spoilers
+    updateHighestReachedQuestion(index);
+    
     const question = questions[index];
     
     // Update question display
@@ -480,6 +509,38 @@ function loadQuestion(index) {
     
     // Update questions overview
     updateQuestionsOverview();
+    
+    // Update navigation button states
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    const prevButton = document.getElementById('prev-question');
+    const nextButton = document.getElementById('next-question');
+    
+    // Update previous button
+    if (prevButton) {
+        if (currentQuestionIndex > 0) {
+            prevButton.disabled = false;
+            prevButton.textContent = '⬅️ Previous Question';
+            prevButton.title = 'Go to previous question';
+        } else {
+            prevButton.disabled = true;
+            prevButton.textContent = '⬅️ Previous Question';
+            prevButton.title = 'No previous question';
+        }
+    }
+    
+    // Update next button
+    if (nextButton) {
+        if (currentQuestionIndex < questions.length - 1) {
+            nextButton.textContent = '➡️ Next Question';
+            nextButton.title = 'Proceed to next question';
+        } else {
+            nextButton.textContent = '🏁 Finish Interview';
+            nextButton.title = 'Complete the interview';
+        }
+    }
 }
 
 function formatQuestionContent(question) {
@@ -561,31 +622,98 @@ function generateQuestionsOverview() {
     questions.forEach((question, index) => {
         const item = document.createElement('div');
         item.className = 'question-item';
+        
+        // Show only question number and status, not the question content
+        const statusIcon = answers[index] && answers[index].trim() ? '✅' : '⭕';
+        const statusText = answers[index] && answers[index].trim() ? 'Answered' : 'Not Answered';
+        
         item.innerHTML = `
             <div class="question-number">Q${index + 1}</div>
-            <div class="question-title">${question.question.substring(0, 50)}...</div>
+            <div class="question-status">
+                <span class="status-icon">${statusIcon}</span>
+                <span class="status-text">${statusText}</span>
+            </div>
         `;
         
-        item.addEventListener('click', () => {
-            saveCurrentAnswer();
-            loadQuestion(index);
-        });
+        // Only allow navigation to previous questions and current question
+        // This prevents spoilers and enforces sequential progression
+        if (index <= Math.max(currentQuestionIndex, getHighestReachedQuestion())) {
+            item.classList.add('accessible');
+            item.addEventListener('click', () => {
+                if (index !== currentQuestionIndex) {
+                    saveCurrentAnswer();
+                    loadQuestion(index);
+                }
+            });
+        } else {
+            item.classList.add('locked');
+            item.title = 'Complete current question to unlock';
+        }
         
         overview.appendChild(item);
     });
 }
 
+// Helper function to track the highest question number reached
+function getHighestReachedQuestion() {
+    // Store in a simple variable that persists during the session
+    if (!window.highestReachedQuestion) {
+        window.highestReachedQuestion = 0;
+    }
+    return window.highestReachedQuestion;
+}
+
+function updateHighestReachedQuestion(questionIndex) {
+    if (!window.highestReachedQuestion) {
+        window.highestReachedQuestion = 0;
+    }
+    window.highestReachedQuestion = Math.max(window.highestReachedQuestion, questionIndex);
+}
+
 function updateQuestionsOverview() {
     const items = document.querySelectorAll('.question-item');
+    const highestReached = getHighestReachedQuestion();
+    
     items.forEach((item, index) => {
-        item.classList.remove('current', 'answered');
+        item.classList.remove('current', 'answered', 'accessible', 'locked');
         
+        // Mark current question
         if (index === currentQuestionIndex) {
             item.classList.add('current');
         }
         
+        // Mark answered questions
         if (answers[index] && answers[index].trim()) {
             item.classList.add('answered');
+            const statusIcon = item.querySelector('.status-icon');
+            const statusText = item.querySelector('.status-text');
+            if (statusIcon) statusIcon.textContent = '✅';
+            if (statusText) statusText.textContent = 'Answered';
+        } else {
+            const statusIcon = item.querySelector('.status-icon');
+            const statusText = item.querySelector('.status-text');
+            if (statusIcon) statusIcon.textContent = '⭕';
+            if (statusText) statusText.textContent = 'Not Answered';
+        }
+        
+        // Update accessibility based on highest reached question
+        if (index <= highestReached) {
+            item.classList.add('accessible');
+            item.title = index === currentQuestionIndex ? 'Current question' : 'Click to revisit';
+            
+            // Re-add click listener for accessible questions
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+            
+            if (index !== currentQuestionIndex) {
+                newItem.addEventListener('click', () => {
+                    saveCurrentAnswer();
+                    loadQuestion(index);
+                });
+            }
+        } else {
+            item.classList.add('locked');
+            item.title = 'Complete current question to unlock';
         }
     });
 }
@@ -687,6 +815,19 @@ function nextQuestion() {
         loadQuestion(currentQuestionIndex + 1);
     } else {
         endInterview();
+    }
+}
+
+function previousQuestion() {
+    // Save current answer before going back
+    saveCurrentAnswer();
+    
+    // Check if we can go back
+    if (currentQuestionIndex > 0) {
+        loadQuestion(currentQuestionIndex - 1);
+        showNotification('Moved to previous question', 'info');
+    } else {
+        showNotification('Already at the first question', 'warning');
     }
 }
 
